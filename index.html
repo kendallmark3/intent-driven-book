@@ -8,7 +8,18 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#f0ede8;--panel:#ffffff;--border:#c8c4bc;--black:#0a0a0a;--amber:#b87309;--amberbg:#fef3dc;--amberbdr:#e8a020;--muted:#3a3a3a}
-body{background:var(--bg);color:var(--black);font-family:'Archivo',sans-serif;font-size:16px;line-height:1.6}
+body{background:var(--bg);color:var(--black);font-family:'Archivo',sans-serif;font-size:16px;line-height:1.6;padding-top:56px}
+/* nav bar */
+.nav-bar{position:fixed;top:0;left:0;right:0;background:var(--black);border-bottom:2px solid var(--amberbdr);display:grid;grid-template-columns:1fr auto 1fr;z-index:100;height:56px}
+.nav-btn{padding:.7rem 1.25rem;text-decoration:none;color:#fff;display:flex;align-items:center;gap:.65rem;transition:background .15s;min-width:0}
+.nav-btn:hover{background:#1c1c1c}
+.nav-btn.disabled{opacity:.25;pointer-events:none}
+.nav-arrow{font-size:1.1rem;color:var(--amberbdr);flex-shrink:0;line-height:1}
+.nav-label{font-family:'Archivo Black',sans-serif;font-size:.78rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.nav-sub{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.12em;color:#666;text-transform:uppercase;margin-bottom:.15rem}
+.nav-home{padding:.7rem 1.1rem;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--amberbdr);border-left:1px solid #2a2a2a;border-right:1px solid #2a2a2a;transition:background .15s;font-size:1rem;flex-shrink:0}
+.nav-home:hover{background:#1c1c1c}
+@media(max-width:700px){.nav-label{display:none}.nav-btn{justify-content:center}}
 .header{background:var(--black);border-bottom:3px solid var(--amberbdr);padding:.9rem 2.5rem;display:flex;align-items:center;justify-content:space-between}
 .brand{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--amberbdr);text-decoration:none}
 .tag{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#888;letter-spacing:.12em;text-transform:uppercase}
@@ -131,4 +142,6 @@ footer a{text-decoration:none}footer .amber{color:var(--amberbdr)}
 </div></div>
 <footer><span>The Intent-Driven Enterprise · Mark Kendall · Wipro Buildit · 2026</span><a href="https://learnteachmaster.org" class="amber" target="_blank" rel="noopener">learnteachmaster.org</a></footer>
 <script>window.onload=function(){window.parent.postMessage({type:"setHeight",value:document.body.scrollHeight},"*")}</script>
+
+<nav class="nav-bar"><span class="nav-btn disabled"><span class="nav-arrow">&#8592;</span></span><a href="chapter-01.html" class="nav-home" title="Home">&#8962;</a><a href="chapter-01.html" class="nav-btn" style="justify-content:flex-end;text-align:right"><div><div class="nav-sub">Start Reading</div><div class="nav-label">Ch 1: The AI Adoption Illusion</div></div><span class="nav-arrow">&#8594;</span></a></nav>
 </body></html>
