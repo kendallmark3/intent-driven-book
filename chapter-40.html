@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 40: Owning the Category — The Intent-Driven Enterprise</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f0ede8;--panel:#ffffff;--panel2:#f7f5f1;--border:#c8c4bc;--black:#0a0a0a;--dark:#1a1a1a;--muted:#3a3a3a;--amber:#b87309;--amberbg:#fef3dc;--amberbdr:#e8a020;--green:#14532d;--greenbg:#dcfce7}
+body{background:var(--bg);color:var(--black);font-family:'Archivo',sans-serif;font-size:16px;line-height:1.6;padding-top:56px}
+.header{background:var(--black);border-bottom:3px solid var(--amberbdr);padding:.9rem 2.5rem;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--amberbdr);text-decoration:none}
+.hdr-tag{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#888;letter-spacing:.12em;text-transform:uppercase}
+.hero{background:var(--black);padding:2.5rem 2.5rem 2rem;border-bottom:3px solid var(--amberbdr)}
+.part-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--amberbdr);margin-bottom:.5rem}
+.chnum{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.18em;color:#666;margin-bottom:.75rem}
+.hero h1{font-family:'Archivo Black',sans-serif;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.02em;color:#fff;margin-bottom:.9rem}
+.hero h1 span{color:var(--amberbdr)}
+.hero-lead{font-size:1.05rem;color:#ccc;max-width:760px;line-height:1.72}
+/* sections */
+.section{padding:2.25rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--amber);margin-bottom:.35rem}
+.sec-label+h2{font-family:'Archivo Black',sans-serif;font-size:clamp(1.3rem,2.5vw,1.9rem);letter-spacing:-.02em;color:var(--black);margin-bottom:1.5rem;border-bottom:2px solid var(--amberbdr);padding-bottom:.45rem}
+/* book sections grid */
+.book-sections{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+.book-sec{background:var(--panel);padding:1.5rem 1.75rem}
+.book-sec:hover{background:var(--amberbg)}
+.book-sec-heading{font-family:'Archivo Black',sans-serif;font-size:1rem;color:var(--amber);margin-bottom:.6rem;letter-spacing:-.01em}
+.book-sec-para{font-size:.92rem;color:var(--muted);line-height:1.7;margin-bottom:.5rem}
+.book-sec-para:last-child{margin-bottom:0}
+/* takeaways */
+.takeaways{background:var(--greenbg);border:1px solid #86efac;padding:1.75rem 2rem;margin-top:0}
+.takeaways h3{font-family:'Archivo Black',sans-serif;font-size:1.05rem;color:var(--green);margin-bottom:1rem;letter-spacing:-.01em}
+.t-item{display:flex;gap:.75rem;margin-bottom:.65rem;font-size:.93rem;color:var(--dark);font-weight:600;align-items:flex-start}
+.t-check{color:var(--green);font-weight:700;flex-shrink:0}
+/* full text block */
+.reading{background:var(--panel);border:1px solid var(--border);padding:1.75rem 2rem}
+.reading p{font-size:.93rem;color:var(--muted);line-height:1.78;margin-bottom:.9rem}
+.reading p:last-child{margin-bottom:0}
+/* meta */
+.meta-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.meta-cell{background:var(--panel);padding:1.1rem 1.4rem}
+.meta-lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:.3rem}
+.meta-val{font-family:'Archivo Black',sans-serif;font-size:.88rem;color:var(--black)}
+/* sticky nav bar */
+.nav-bar{position:fixed;top:0;left:0;right:0;background:var(--black);border-bottom:2px solid var(--amberbdr);display:grid;grid-template-columns:1fr auto 1fr;z-index:100;height:56px}
+.nav-btn{padding:.7rem 1.25rem;text-decoration:none;color:#fff;display:flex;align-items:center;gap:.65rem;transition:background .15s;min-width:0}
+.nav-btn:hover{background:#1c1c1c}
+.nav-btn.next{justify-content:flex-end;text-align:right}
+.nav-btn.disabled{opacity:.25;pointer-events:none}
+.nav-arrow{font-size:1.1rem;color:var(--amberbdr);flex-shrink:0;line-height:1}
+.nav-label{font-family:'Archivo Black',sans-serif;font-size:.78rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.nav-sub{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.12em;color:#666;text-transform:uppercase;margin-bottom:.15rem}
+.nav-home{padding:.7rem 1.1rem;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--amberbdr);border-left:1px solid #2a2a2a;border-right:1px solid #2a2a2a;transition:background .15s;font-size:1rem;flex-shrink:0}
+.nav-home:hover{background:#1c1c1c}
+@media(max-width:700px){.nav-label{display:none}.nav-btn{justify-content:center}.nav-btn.next{justify-content:center}}
+/* quote */
+.pull-quote{background:var(--black);padding:2rem 2.5rem;border-left:4px solid var(--amberbdr);margin:0}
+.pull-quote blockquote{font-family:'Archivo Black',sans-serif;font-size:clamp(1.1rem,2.5vw,1.7rem);line-height:1.3;letter-spacing:-.02em;color:#fff}
+.pull-quote blockquote em{font-style:normal;color:var(--amberbdr)}
+footer{background:var(--black);border-top:1px solid #333;padding:1.1rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+footer span{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.12em;color:#888}
+footer a{text-decoration:none}footer .amber{color:var(--amberbdr)}
+@media(max-width:700px){.hero,.section{padding:1.75rem 1.25rem}.meta-row{grid-template-columns:1fr}.nav-row{grid-template-columns:1fr}footer{flex-direction:column;gap:.5rem;padding:1rem}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="chapter-01.html" class="brand">LearnTeachMaster · Intent-Driven Enterprise</a>
+  <div class="hdr-tag">Chapter 40 of 40</div>
+</header>
+
+<div class="hero">
+  <div class="chnum">CHAPTER 40 OF 40</div>
+  <div class="part-tag">Part X — The Future · Chapter 40</div>
+  <h1><span>Ch 40.</span> Owning the Category</h1>
+  <p class="hero-lead"></p>
+</div>
+
+<div class="section">
+  <div class="sec-label">From the Book</div>
+  <h2>What This Chapter Covers</h2>
+  <div class="book-sections">
+    <div class="book-sec"><p class="book-sec-para">You have reached the last chapter of the first book on Intent-Driven</p><p class="book-sec-para">That sentence is not marketing. It is a description of a specific moment in</p><p class="book-sec-para">the lifecycle of a discipline — the moment when a coherent set of principles,</p></div><div class="book-sec"><div class="book-sec-heading">Intent-Driven Engineering is clear, specific, and proven. This chapter lays</div><p class="book-sec-para">out what category ownership means, why it matters, and what the</p><p class="book-sec-para">engineering community now has the opportunity to build on top of this</p></div><div class="book-sec"><div class="book-sec-heading">What This Book Has Established</div><p class="book-sec-para">Forty chapters. A complete discipline. Let us be explicit about what has</p><p class="book-sec-para">been established, because the completeness matters for the claim of</p></div><div class="book-sec"><div class="book-sec-heading">The problem has been named precisely: organizations are generating AI</div><p class="book-sec-para">activity without AI outcomes because they lack the architectural discipline</p><p class="book-sec-para">to connect capability to measurable results. The root cause has been</p><p class="book-sec-para">diagnosed: prompt-based workflows do not scale, do not compound, and do</p></div><div class="book-sec"><div class="book-sec-heading">The Standard That Now Exists</div><p class="book-sec-para">A standard is not a standard until it can be referenced, implemented</p><p class="book-sec-para">independently, and validated. This book is the reference. The intent file</p><p class="book-sec-para">schema, the compilation model, the three-tier measurement architecture,</p></div>
+  </div>
+</div>
+
+<div class="section"><div class="sec-label">Continued Reading</div><h2>Further Content</h2><div class="reading"><p>their domains worked for the following decade. Not because they were</p><p>perfect. Because they were first to be clear, first to be specific, and first to</p><p>Intent-Driven Engineering is clear, specific, and proven. This chapter lays</p><p>out what category ownership means, why it matters, and what the</p><p>engineering community now has the opportunity to build on top of this</p></div></div>
+
+<div class="section">
+  <div class="sec-label">Key Takeaways</div>
+  <h2>What to Remember</h2>
+  <div class="takeaways">
+    <h3>Chapter 40 — Owning the Category</h3>
+    <div class="t-item"><span class="t-check">✓</span><span>Intent-Driven Engineering is a category — not a product</span></div><div class="t-item"><span class="t-check">✓</span><span>The community of builders who extend this discipline is the standard long-term guarantee</span></div><div class="t-item"><span class="t-check">✓</span><span>The question is no longer whether to adopt IDE — it is how fast your organisation moves through the phases</span></div>
+  </div>
+</div>
+
+<div class="section"><div class="pull-quote"><blockquote>stage — Agile with the Manifesto in 2001, DevOps with the State of DevOps</blockquote></div></div>
+
+<div class="section">
+  <div class="sec-label">Chapter Reference</div>
+  <h2>Book Metadata</h2>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-lbl">Part</div><div class="meta-val">Part X — The Future</div></div>
+    <div class="meta-cell"><div class="meta-lbl">Chapter</div><div class="meta-val">40 of 40</div></div>
+    <div class="meta-cell"><div class="meta-lbl">Section</div><div class="meta-val">Chapter 40</div></div>
+  </div>
+</div>
+
+      <div class="nav-title">Ch 39: From Idea to Running System</div>
+    </a>
+    <a href="#" class="nav-cell disabled">
+      <div class="nav-dir">Next →</div>
+      <div class="nav-title">End of book</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <span>The Intent-Driven Enterprise · Mark Kendall · Wipro Buildit · 2026</span>
+  <a href="https://learnteachmaster.org" class="amber" target="_blank" rel="noopener">learnteachmaster.org</a>
+</footer>
+<script>window.onload=function(){window.parent.postMessage({type:"setHeight",value:document.body.scrollHeight},"*")}</script>
+
+<nav class="nav-bar"><a href="chapter-39.html" class="nav-btn prev"><span class="nav-arrow">&#8592;</span><div><div class="nav-sub">Previous</div><div class="nav-label">Ch 39: From Idea to Running System</div></div></a><a href="chapter-01.html" class="nav-home" title="Home">&#8962;</a><span class="nav-btn next disabled"><span class="nav-arrow">&#8594;</span></span></nav>
+</body>
+</html>
